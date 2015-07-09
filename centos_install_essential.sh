@@ -38,5 +38,6 @@ netstat -tulp
 netstat -tulpn
 systemd-analize > "log-`date '+%Y-%m-%d'`.log"
 
-
+# remove system bell
+rmmod -v pcspkr
 
