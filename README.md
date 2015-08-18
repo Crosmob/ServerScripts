@@ -1,2 +1,0 @@
-# ServerScripts
-Server Side Scripts
