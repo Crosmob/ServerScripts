@@ -11,7 +11,6 @@ my $dspmq = "";
 my $dspmqver = "";
 my $dspmqline = "";
 my @qmgrs;
-print "$os";
 
 # this script will continue the work if the OS is SunOS or Linux
 if ( $os eq "sunos" || $os eq "solaris" || $os eq "linux" ){
@@ -26,14 +25,18 @@ if ( $os eq "sunos" || $os eq "solaris" || $os eq "linux" ){
 		@qmgrs = split /\n/, $dspmq;
 		foreach my $dspmqline (@qmgrs) {
 			if($dspmqline =~ m/\s*QMNAME\(([\w\.]+)\)\s+STATUS\((\w+)\)/) {
-				print "$host,$os,$dspmqver,$1,$2\n";
+				print "$host,$os,server,$dspmqver,$1,$2\n";
 			}
 		}
 	}elsif ( -e $dspmqverpath ){
 	# there is mq client
-	print "";
+		# we get the mq version
+                $dspmqver = `dspmqver`;
+                $dspmqver =~ /([0-9].[0-9].[0-25].[0-25])/;
+                $dspmqver = $1;
+		print "$host,$os,client,$dspmqver,,";
 	}else{
 	# there is no MQ instalaltion
-	print "";
+		print "$host,$os,nomq,,,,";
 	}
 }
