@@ -6,7 +6,7 @@ use Sys::Hostname;
 my $host = hostname();
 my $display = "";
 my $dspmq = "";
-
+# 
 $dspmq = `dspmq`;
 my @qmgrs = split /\n/, $dspmq;
 foreach my $dspmqline (@qmgrs) {
