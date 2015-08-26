@@ -24,7 +24,7 @@ if(-e $dspmqpath && -e $dspmqverpath){
 				foreach my $resultLine (@resultLines) {
 				# there should be check in case there are results in two lines
 					if($resultLine =~ m/\s*CHANNEL\(([\w\.]+)\)\s+CHLTYPE\((\w+)\)/) {
-						print "$1,$2\n";
+						print "$host,$1,$2\n";
 					}
 					elsif($resultLine =~ m/\s*CHANNEL\(([\w\.]+)\)/) {
 						print "$host,$1,";
