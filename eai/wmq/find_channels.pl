@@ -6,6 +6,8 @@ use Sys::Hostname;
 my $host = hostname();
 my $display = "";
 my $dspmq = "";
+my $qm = "";
+my $qmstatus = "";
 # check if there is mq server installation
 my $dspmqpath = "/opt/mqm/bin/dspmq";
 my $dspmqverpath= "/opt/mqm/bin/dspmqver";
@@ -16,7 +18,9 @@ if(-e $dspmqpath && -e $dspmqverpath){
 	my @qmgrs = split /\n/, $dspmq;
 	foreach my $dspmqline (@qmgrs) {
 		if($dspmqline =~ m/\s*QMNAME\(([\w\.]+)\)\s+STATUS\((\w+)\)/) {
-			print "$1,$2\n";
+			$qm = "$1";
+			$qmstatus = "$2";
+			# print "$1,$2\n";
 			# go through the running queue managers and get the channels info
 			if( $2 eq "Running"){
 				$display = `echo 'DIS CHL(*) CHLTYPE' | runmqsc $1`;
@@ -24,10 +28,10 @@ if(-e $dspmqpath && -e $dspmqverpath){
 				foreach my $resultLine (@resultLines) {
 				# there should be check in case there are results in two lines
 					if($resultLine =~ m/\s*CHANNEL\(([\w\.]+)\)\s+CHLTYPE\((\w+)\)/) {
-						print "$host,$1,$2\n";
+						print "$host,$qm,$qmstatus,$1,$2\n";
 					}
 					elsif($resultLine =~ m/\s*CHANNEL\(([\w\.]+)\)/) {
-						print "$host,$1,";
+						print "$host,$qm,$qmstatus,$1,";
 					}
 					elsif($resultLine =~ m/\s*CHLTYPE\((\w+)\)/) {
 						print "$1\n";
