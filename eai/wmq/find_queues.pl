@@ -27,10 +27,10 @@ if(-e $dspmqpath && -e $dspmqverpath){
 				my @resultLines = split /\n/, $display;
 				foreach my $resultLine (@resultLines) {
 					if($resultLine =~ m/\s*QUEUE\(([\w\.]+)\)\s+TYPE\((\w+)\)/) {
-						print "$1,$2\n";
+						print "$host,$qm,$qmstatus,$1,$2\n";
 					}
 					elsif($resultLine =~ m/\s*QUEUE\(([\w\.]+)\)/) {
-						print "$1,";
+						print "$host,$qm,$qmstatus,$1,";
 					}
 					elsif($resultLine =~ m/\s*TYPE\((\w+)\)/) {
 						print "$1\n";
