@@ -13,7 +13,7 @@ my $dspmqline = "";
 my @qmgrs;
 
 # this script will continue the work if the OS is SunOS or Linux
-if ( $os eq "sunos" || $os eq "solaris" || $os eq "linux" ){
+if ( lc $os eq lc "sunos" || lc $os eq lc "solaris" || lc $os eq lc "linux" ){
 # now we will check if there is MQ Client or MQ Server
 	if (-e $dspmqpath && -e $dspmqverpath){
 		# there is mq server
