@@ -62,8 +62,13 @@ if(-e $dspmqpath && -e $dspmqverpath){
                 }
         }
 }
+elsif(-e $dspmqverpath){
+        # there is only mq client installed
+        $dspmqver = `dspmqver`;
+        $dspmqver =~ /([0-9].[0-9].[0-25].[0-25])/;
+        print "$host,$1,,,,\n";
+}
 else {
 # there was no mq server installed there
         print "$host,,,,,\n";
 }
-
