@@ -5,6 +5,7 @@ use Socket;
 use Sys::Hostname;
 my $host = hostname();
 my $display = "";
+my $displayc = "";
 my $dspmq = "";
 my $qm = "";
 my $qmstatus = "";
@@ -33,6 +34,19 @@ if(-e $dspmqpath && -e $dspmqverpath){
 						print "$host,$qm,$qmstatus,$1,";
 					}
 					elsif($resultLine =~ m/\s*TYPE\((\w+)\)/) {
+						print "$1\n";
+					}
+				}
+				$displayc = `echo 'DIS QC(*) TYPE' | runmqsc $1`;
+				my @resultLinesc = split /\n/, $displayc;
+				foreach my $resultLinec (@resultLinesc) {
+					if($resultLinec =~ m/\s*QUEUE\(([\w\.]+)\)\s+TYPE\((\w+)\)/) {
+						print "$host,$qm,$qmstatus,$1,$2\n";
+					}
+					elsif($resultLinec =~ m/\s*QUEUE\(([\w\.]+)\)/) {
+						print "$host,$qm,$qmstatus,$1,";
+					}
+					elsif($resultLinec =~ m/\s*TYPE\((\w+)\)/) {
 						print "$1\n";
 					}
 				}
