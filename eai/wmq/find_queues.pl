@@ -9,12 +9,17 @@ my $displayc = "";
 my $dspmq = "";
 my $qm = "";
 my $qmstatus = "";
+my $dspmqver = "";
 # check if there is mq server installation
 my $dspmqpath = "/opt/mqm/bin/dspmq";
 my $dspmqverpath= "/opt/mqm/bin/dspmqver";
 
 if(-e $dspmqpath && -e $dspmqverpath){
         # mq server installation was found - now we will find the running qmgrs
+        # first we get the mq version
+        $dspmqver = `dspmqver`;
+        $dspmqver =~ /([0-9].[0-9].[0-25].[0-25])/;
+        $dspmqver = $1;
         $dspmq = `dspmq`;
         my @qmgrs = split /\n/, $dspmq;
         foreach my $dspmqline (@qmgrs) {
@@ -28,10 +33,10 @@ if(-e $dspmqpath && -e $dspmqverpath){
                                 my @resultLines = split /\n/, $display;
                                 foreach my $resultLine (@resultLines) {
                                         if($resultLine =~ m/\s*QUEUE\(([\w\.]+)\)\s+TYPE\((\w+)\)/) {
-                                                print "$host,$qm,$qmstatus,$1,$2\n";
+                                                print "$host,$dspmqver,$qm,$qmstatus,$1,$2\n";
                                         }
                                         elsif($resultLine =~ m/\s*QUEUE\(([\w\.]+)\)/) {
-                                                print "$host,$qm,$qmstatus,$1,";
+                                                print "$host,$dspmqver,$qm,$qmstatus,$1,";
                                         }
                                         elsif($resultLine =~ m/\s*TYPE\((\w+)\)/) {
                                                 print "$1\n";
@@ -41,10 +46,10 @@ if(-e $dspmqpath && -e $dspmqverpath){
                                 my @resultLinesc = split /\n/, $displayc;
                                 foreach my $resultLinec (@resultLinesc) {
                                         if($resultLinec =~ m/\s*QUEUE\(([\w\.]+)\)\s+TYPE\((\w+)\)/) {
-                                                print "$host,$qm,$qmstatus,$1,$2\n";
+                                                print "$host,$dspmqver,$qm,$qmstatus,$1,$2\n";
                                         }
                                         elsif($resultLinec =~ m/\s*QUEUE\(([\w\.]+)\)/) {
-                                                print "$host,$qm,$qmstatus,$1,";
+                                                print "$host,$dspmqver,$qm,$qmstatus,$1,";
                                         }
                                         elsif($resultLinec =~ m/\s*TYPE\((\w+)\)/) {
                                                 print "$1\n";
@@ -52,12 +57,13 @@ if(-e $dspmqpath && -e $dspmqverpath){
                                 }
                         }
                         else{
-                                print "$host,$qm,$qmstatus,,\n";
+                                print "$host,$dspmqver,$qm,$qmstatus,,\n";
                         }
                 }
         }
 }
 else {
 # there was no mq server installed there
-        print "$host,,,,\n";
+        print "$host,,,,,\n";
 }
+
